@@ -8,7 +8,7 @@ public class LoadScene : MonoBehaviour
     public int sceneID;
     public Slider loadSlider;
 
-    private void Start()
+    void Start()
     {
         StartCoroutine(LoadNextScene(sceneID));
     }

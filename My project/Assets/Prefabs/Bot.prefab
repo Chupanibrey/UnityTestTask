@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7048526323742201029}
   m_Layer: 0
   m_Name: Bot
-  m_TagString: Untagged
+  m_TagString: Bot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -134,3 +134,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbe4471e112f2bb4aa898c8e9f164e08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healph: 0
+  gameManager: {fileID: 0}

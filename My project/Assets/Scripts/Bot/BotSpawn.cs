@@ -1,18 +1,25 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BotSpawn : MonoBehaviour
 {
     [SerializeField]
-    private GameObject botPrefab;
+    GameObject botPrefab;
     [SerializeField]
-    private MeshCollider plane;
+    MeshCollider plane;
     [SerializeField]
-    private int numberOfBots;
+    int numberOfBots;
 
-    private void Start()
+    
+    public List<Bot> allBots;
+
+    void Start()
     {
         for(int i = 0; i < numberOfBots; i++)
             BotInstantiate();
+
+        foreach (var bot in allBots)
+            bot.Initialization();
     }
 
     /// <summary>
@@ -25,7 +32,10 @@ public class BotSpawn : MonoBehaviour
         var spawnPos = new Vector3(x, 1.15f, z);
 
         if (CheckSpawnPoint(spawnPos))
-            Instantiate(botPrefab, spawnPos, Quaternion.identity, this.transform);
+        {
+            allBots.Add(Instantiate(botPrefab, spawnPos, Quaternion.identity, this.transform)
+                        .GetComponent<Bot>());
+        }
         else
             BotInstantiate();
     }
