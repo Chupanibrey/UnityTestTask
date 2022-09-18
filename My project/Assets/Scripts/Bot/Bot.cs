@@ -7,56 +7,68 @@ public class Bot : MonoBehaviour
     #region [ BotData ]
     [SerializeField]
     public float healph;
+    public int score;
+
     float speed;
     float damage;
+
+    float timeTilNextHit = 0.0f;
+    float timeBetweenHit = 0.5f;
     #endregion
 
-    [SerializeField]
     BotSpawn gameManager;
-
-    Bot target;
     NavMeshAgent navMesh;
-
-    float timeTilNextFire = 0.0f;
-    float timeBetweenFires = 0.5f;
+    Bot target;
 
     public void Initialization()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager")
             .GetComponent<BotSpawn>();
         navMesh = GetComponent<NavMeshAgent>();
+
         RandomData();
         InvokeRepeating("TargetSearch", 0, 1f);
     }
 
     void Update()
     {
-        if (target == null)
-            TargetSearch();
+        BotAI();
+    }
 
-        if (Vector3.Distance(transform.position, target.transform.position) > 1f )
-            MoveTo(target);
-        else
+    void BotAI()
+    {
+        if (gameManager.allBots.Count > 1)
         {
-            Attack();
+            if (target == null)
+                TargetSearch();
 
-            if (target.healph <= 0)
+            if (Vector3.Distance(transform.position, target.transform.position) < 1f)
             {
-                gameManager.allBots.Remove(target);
-                Destroy(target.gameObject);
+                Attack();
+
+                if (target.healph <= 0)
+                {
+                    score++;
+                    gameManager.allBots.Remove(target);
+                    Destroy(target.gameObject);
+                }
             }
+            else
+                MoveTo(target);
         }
+        else
+            CancelInvoke("TargetSearch");
     }
 
     void Attack()
     {
-        if (timeTilNextFire < 0)
+        if (timeTilNextHit < 0)
         {
             target.healph -= damage;
-            timeTilNextFire = timeBetweenFires;
+            timeTilNextHit = timeBetweenHit;
         }
 
-        timeTilNextFire -= Time.deltaTime;
+        timeTilNextHit -= Time.deltaTime;
     }
 
     void MoveTo(Bot target)
@@ -69,6 +81,7 @@ public class Bot : MonoBehaviour
         healph = Random.Range(40f, 100f);
         damage = Random.Range(5f, 15f);
         speed = Random.Range(4f, 8f);
+        navMesh.speed = speed;
     }
 
     void TargetSearch()
