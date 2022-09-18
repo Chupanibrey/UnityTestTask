@@ -2,15 +2,20 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
 
+/// <summary>
+/// Сущность бота
+/// </summary>
 public class Bot : MonoBehaviour
 {
     #region [ BotData ]
-    [SerializeField]
+    [HideInInspector]
     public float healph;
+    [HideInInspector]
     public int score;
 
     float speed;
     float damage;
+    bool allBotsDead;
 
     float timeTilNextHit = 0.0f;
     float timeBetweenHit = 0.5f;
@@ -20,6 +25,9 @@ public class Bot : MonoBehaviour
     NavMeshAgent navMesh;
     Bot target;
 
+    /// <summary>
+    /// Метод подключает все необходимые данные для AI
+    /// </summary>
     public void Initialization()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager")
@@ -32,32 +40,40 @@ public class Bot : MonoBehaviour
 
     void Update()
     {
-        BotAI();
+        AI();         
     }
 
-    void BotAI()
+    void AI()
     {
+        if(allBotsDead)
+            return;
+
+
         if (gameManager.allBots.Count > 1)
         {
             if (target == null)
                 TargetSearch();
 
-            if (Vector3.Distance(transform.position, target.transform.position) < 1f)
+            if (Vector3.Distance(transform.position, target.transform.position) > 1f)
+                MoveTo(target);
+            else
             {
                 Attack();
 
                 if (target.healph <= 0)
                 {
                     score++;
+                    damage += 1.5f;
                     gameManager.allBots.Remove(target);
                     Destroy(target.gameObject);
                 }
             }
-            else
-                MoveTo(target);
         }
         else
+        {
+            allBotsDead = true;
             CancelInvoke("TargetSearch");
+        }
     }
 
     void Attack()

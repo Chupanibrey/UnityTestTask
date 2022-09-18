@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Сущность спаунера ботов
+/// </summary>
 public class BotSpawn : MonoBehaviour
 {
     [SerializeField]
@@ -10,12 +13,11 @@ public class BotSpawn : MonoBehaviour
     [SerializeField]
     int numberOfBots;
 
-    
     public List<Bot> allBots;
 
     void Start()
     {
-        for(int i = 0; i < numberOfBots; i++)
+        for (int i = 0; i < numberOfBots; i++)
             BotInstantiate();
 
         foreach (var bot in allBots)
