@@ -15,6 +15,7 @@ public class Bot : MonoBehaviour
         var gameManager = GameObject.FindGameObjectWithTag("GameManager")
             .GetComponent<BotSpawn>();
         var navMeshAgent = GetComponent<NavMeshAgent>();
+
         data = new BotData();
         AI = new BotAI(data, navMeshAgent, gameManager);
     }
@@ -89,6 +90,20 @@ class BotAI
             .First();
     }
 
+    float timeTilNextInvoke = 0f;
+    float timeBetweenInvoke = 1.5f;
+
+    void TargetSearchRepetition(Transform currPos)
+    {
+        if (timeTilNextInvoke < 0)
+        {
+            TargetSearch(currPos);
+            timeTilNextInvoke = timeBetweenInvoke;
+        }
+
+        timeTilNextInvoke -= Time.deltaTime;
+    }
+
     float CalculateDistance(Transform currPos, Bot target)
     {
         NavMeshPath path = new NavMeshPath();
@@ -137,7 +152,9 @@ class BotAI
 
         if (gameManager.allBots.Count > 1)
         {
-            if(target == null)
+            TargetSearchRepetition(currPos);
+
+            if (target == null)
                 TargetSearch(currPos);
 
             if (Vector3.Distance(currPos.position, target.transform.position) > 1.5f)

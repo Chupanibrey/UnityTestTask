@@ -12,7 +12,7 @@ public class CanvasControl : MonoBehaviour
 
     Transform canvasTransform;
 
-    private void Awake()
+    void Awake()
     {
         canvasTransform = transform;
     }

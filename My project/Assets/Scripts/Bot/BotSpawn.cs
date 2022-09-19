@@ -37,12 +37,13 @@ public class BotSpawn : MonoBehaviour
                 var spawnPos = hit.point + new Vector3(0, 1.15f, 0);
                 if (hit.point.y <= 1.15f && CheckSpawnPoint(spawnPos))
                 {
-                    allBots.Add(Instantiate(botPrefab, spawnPos, Quaternion.identity, this.transform)
-                            .GetComponent<Bot>());
+                    var bot = Instantiate(botPrefab, spawnPos, Quaternion.identity, this.transform)
+                            .GetComponent<Bot>();
 
-                    if(allBots.Count > 1)
-                        foreach (var b in allBots)
-                            b.data.allBotsDead = false;
+                    if (allBots.Count == 1)
+                        allBots[0].data.allBotsDead = false;
+
+                    allBots.Add(bot);  
                 }
             }
         }
