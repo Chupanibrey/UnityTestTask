@@ -354,6 +354,7 @@
 "Assets/Scripts/Bot/Bot.cs"
 "Assets/Scripts/Bot/BotSpawn.cs"
 "Assets/Scripts/Bot/CanvasControl.cs"
+"Assets/Scripts/Camera/FreeCamera.cs"
 "Assets/Scripts/Scene/LoadScene.cs"
 "Assets/Scripts/Scene/MainScene.cs"
 -langversion:9.0

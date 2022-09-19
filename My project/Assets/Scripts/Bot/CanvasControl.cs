@@ -4,23 +4,23 @@ using TMPro;
 public class CanvasControl : MonoBehaviour
 {
     [SerializeField]
-    Transform canvasTransform;
-    [SerializeField]
     TextMeshProUGUI health;
     [SerializeField]
     TextMeshProUGUI score;
-
+    [SerializeField]
     Bot bot;
+
+    Transform canvasTransform;
 
     private void Awake()
     {
-        bot = this.GetComponent<Bot>();
+        canvasTransform = transform;
     }
 
     void LateUpdate()
     {
-        health.text = ((int)bot.healph).ToString();
-        score.text = bot.score.ToString();
+        health.text = ((int)bot.data.healph).ToString();
+        score.text = bot.data.score.ToString();
         canvasTransform.LookAt(Camera.main.transform.position);
     }
 }

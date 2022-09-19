@@ -19,9 +19,33 @@ public class BotSpawn : MonoBehaviour
     {
         for (int i = 0; i < numberOfBots; i++)
             BotInstantiate();
+    }
 
-        foreach (var bot in allBots)
-            bot.Initialization();
+    void Update()
+    {
+        OnClickBotInstantiate();
+    }
+
+    void OnClickBotInstantiate()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
+
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+            {
+                var spawnPos = hit.point + new Vector3(0, 1.15f, 0);
+                if (hit.point.y <= 1.15f && CheckSpawnPoint(spawnPos))
+                {
+                    allBots.Add(Instantiate(botPrefab, spawnPos, Quaternion.identity, this.transform)
+                            .GetComponent<Bot>());
+
+                    if(allBots.Count > 1)
+                        foreach (var b in allBots)
+                            b.data.allBotsDead = false;
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -46,6 +70,7 @@ public class BotSpawn : MonoBehaviour
     /// Метод проверяет пересечения коллайдеров
     /// </summary>
     /// <param name="spawnPos">Точка на поверхности</param>
+    /// <returns>Истинность проверки</returns>
     bool CheckSpawnPoint(Vector3 spawnPos)
     {
         var colliders = Physics.OverlapBox(spawnPos, botPrefab.transform.localScale);
